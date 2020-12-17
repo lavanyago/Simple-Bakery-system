@@ -1,0 +1,37 @@
+﻿@model Batch
+
+<div>
+    <div>
+        <h3 style="display:inline">Update Batch</h1>
+        <a asp-controller="Inventory" asp-action="Details" asp-route-id="@Model.InventoryItemId" class="btn btn-primary" style="float:right">Back to Item</a>
+    </div>
+    <hr/>
+
+    <form asp-action="Update">
+        <input type="hidden" asp-for="Id"/>
+        <input type="hidden" asp-for="InventoryItemId"/>
+        <input type="hidden" asp-for="ProductionDate"/>
+        <input type="hidden" asp-for="Quantity"/>  
+        <div class="form-group">
+            <label asp-for="Quantity">Remaining Quantity</label>
+            <input type="number" min="0" max="@Model.Quantity" class="form-control" asp-for="RemainingQuantity"/>
+        </div>
+        <div class="form-group">
+            <label asp-for="Quantity">Quantity</label>
+            <span class="form-control">@Model.Quantity</span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ProductionDate">Date</label>
+            <span class="form-control">@Model.ProductionDate.ToString("yyyy-MM-dd")</span>
+        </div>
+        <button class="btn btn-success" type="submit">Update</button>
+    </form>
+    <hr/>
+    @if (Model.RemainingQuantity == 0) {     
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="InventoryItemId"/>
+            <input type="hidden" asp-for="Id"/>
+            <button type="submit" class="btn btn-primary">Archive</button>
+        </form>
+    }
+</div>

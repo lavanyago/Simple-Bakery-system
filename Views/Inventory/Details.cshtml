@@ -1,0 +1,81 @@
+﻿@model InventoryItem
+@{
+    var batches = Model.Batches.Where(x => x.IsArchived == false);
+}
+
+<div>
+    <div>
+        <h3 style="display:inline">Item Details</h1>
+        <a asp-action="Index" class="btn btn-primary" style="float:right">Back</a>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-5">
+            <dl class="row">
+                <dt class="col-sm-4">Name</dt>
+                <dd class="col-sm-8">@Model.Name</dd>
+
+                <dt class="col-sm-4">Description</dt>
+                <dd class="col-sm-8">@Model.Description</dd>
+
+                <dt class="col-sm-4">Price</dt>
+                <dd class="col-sm-8">@Model.Price</dd>
+
+                <dt class="col-sm-4">Days to Sell</dt>
+                <dd class="col-sm-8">@Model.DaysToSell</dd>
+
+                <dt class="col-sm-4">Remaining Quantity</dt>
+                <dd class="col-sm-8">@Model.Batches.Sum(x => x.RemainingQuantity)</dd>
+                
+            </dl>
+            <br/>
+            <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+            <form asp-action="Delete" style="display:inline">
+                <input type="hidden" asp-for="Id"/>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+            <a asp-controller="Batch" asp-action="Create" asp-route-InventoryItemId="@Model.Id" class="btn btn-success">New Batch</a>
+        </div>
+        <div class="col-md-7">
+            <div>
+            @if (batches.Count() == 0) {
+                <div>No batches made</div>
+            } else {
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Production Date</th>
+                            <th>Remaining</th>
+                            <th>Initial</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var batch in batches) {
+                            var rowClass = "";
+                            if ((DateTime.Now - batch.ProductionDate).TotalDays + 1 > Model.DaysToSell){
+                                rowClass="table-warning";
+                            }
+                            if ((DateTime.Now - batch.ProductionDate).TotalDays > Model.DaysToSell){
+                                rowClass="table-danger";
+                            }
+                            if (batch.RemainingQuantity == 0) {
+                                rowClass = "table-secondary";
+                            }
+                        <tr class="@rowClass">
+                            <td>@batch.ProductionDate</td>
+                            <td>@batch.RemainingQuantity</td>
+                            <td>@batch.Quantity</td>
+                            <td>
+                                <a asp-controller="Batch" asp-action="Update" asp-route-inventoryItemId="@batch.InventoryItemId" asp-route-batchId="@batch.Id">Update</a>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            </div>
+        </div>
+    </div>
+</div>
+

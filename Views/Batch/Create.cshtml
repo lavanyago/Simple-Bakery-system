@@ -1,0 +1,22 @@
+﻿@model Batch
+
+<div>
+    <div>
+        <h3 style="display:inline">New Batch</h1>
+        <a asp-controller="Inventory" asp-action="Details" asp-route-id="@Model.InventoryItemId" class="btn btn-primary" style="float:right">Back to Item</a>
+    </div>
+    <hr/>
+
+    <form asp-action="Create">
+        <input type="hidden" asp-for="InventoryItemId"/>
+        <div class="form-group">
+            <label asp-for="Quantity">Quantity</label>
+            <input type="text" class="form-control" asp-for="Quantity"/>
+        </div>
+        <div class="form-group">
+            <label asp-for="ProductionDate">Date</label>
+            <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" asp-for="ProductionDate"/>
+        </div>
+        <button class="btn btn-success" type="submit">Add</button>
+    </form>
+</div>

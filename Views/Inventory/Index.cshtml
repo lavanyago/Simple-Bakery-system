@@ -1,0 +1,31 @@
+﻿@model List<InventoryItem>
+
+<div>
+    <div>
+        <h3 style="display:inline">Inventory</h3>
+        <a asp-action="Create" class="btn btn-primary" style="float:right">New Item</a>
+    </div>
+    <hr/>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Price</td>
+                <td>@item.Batches.Sum(x => x.RemainingQuantity)</td>
+                <td><a asp-action="Details" asp-route-id="@item.Id">Details</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
